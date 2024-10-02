@@ -1,0 +1,40 @@
+### 가입
+POST http://localhost:8080/auth/signup
+Content-Type: application/json
+
+{
+  "email": "test@test.org",
+  "password": "test",
+  "nickname": "테스트닉",
+  "userRole": "USER"
+}
+
+### 로그인
+POST http://localhost:8080/auth/signin
+Content-Type: application/json
+
+{
+  "email": "test@test.org",
+  "password": "test"
+}
+
+> {%
+client.global.set("token", response.body.bearerToken)
+%}
+
+### 사용자 정보
+< {% request.variables.set("userId", 1) %}
+GET http://localhost:8080/users/{{userId}}
+Content-Type: application/json
+Authorization: {{token}}
+
+### Todo 저장
+POST http://localhost:8080/todos
+Content-Type: application/json
+Authorization: {{token}}
+
+{
+  "title": "테스트제목1",
+  "contents": "내용1"
+}
+
