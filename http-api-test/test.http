@@ -37,4 +37,28 @@ Authorization: {{token}}
   "title": "테스트제목1",
   "contents": "내용1"
 }
+> {%
+    client.global.set("todoId", response.body.id)
+%}
 
+### Todo 조회
+GET http://localhost:8080/todos/{{todoId}}
+Content-Type: application/json
+Authorization: {{token}}
+
+### Commnet 저장
+POST http://localhost:8080/todos/{{todoId}}/comments
+Content-Type: application/json
+Authorization: {{token}}
+
+{
+  "contents": "comments 내용"
+}
+> {%
+    client.global.set("commentId", response.body.id)
+%}
+
+### Comment 조회
+GET http://localhost:8080/todos/{{todoId}}/comments
+Content-Type: application/json
+Authorization: {{token}}
