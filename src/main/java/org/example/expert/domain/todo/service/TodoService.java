@@ -16,6 +16,7 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.util.StringUtils;
 
 @Service
 @RequiredArgsConstructor
@@ -48,10 +49,12 @@ public class TodoService {
         );
     }
 
-    public Page<TodoResponse> getTodos(int page, int size) {
+    public Page<TodoResponse> getTodos(int page, int size, String weather) {
         Pageable pageable = PageRequest.of(page - 1, size);
 
-        Page<Todo> todos = todoRepository.findAllByOrderByModifiedAtDesc(pageable);
+        Page<Todo> todos = null;
+        if (!StringUtils.hasText(weather)) todos = todoRepository.findAllByOrderByModifiedAtDesc(pageable);
+        else todos = todoRepository.findAllByWeatherOrderByModifiedAtDesc(weather, pageable);
 
         return todos.map(todo -> new TodoResponse(
                 todo.getId(),
